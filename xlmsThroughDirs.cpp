@@ -13,16 +13,6 @@ using namespace cv;
 using namespace std;
 
 
-bool checkFile(char* file_name) {
-	ifstream file;
-	file.open(file_name);
-	if (!file)
-		cout << "\nCant find this file : " << file_name;
-	else
-		return true;
-}
-
-
 void fileTypes(string filename) {
 	FileStorage fs(filename, FileStorage::READ);
 	FileNode node = fs["FrameDataArray"];
@@ -51,18 +41,11 @@ int main() {
 		char *cpath = &path[0u];
 		if (path == "q")
 			break;
-		if (stat(cpath, &s) < 0)
+		if (stat(cpath, &s) < 0) {
 			cout << "No such file or directory: " << path << endl;
+		}
 		else {
-			if (checkFile(cpath)) {
-				if (path.substr(path.length() - 4, 4) == ".xml") {
-					fileTypes(path);
-				}
-				else {
-					cout << "Not a xml file: " << path << endl;
-				}
-			}
-			else {
+			if (s.st_mode & S_IFDIR != 0) {
 				vector<String> paths;
 				glob(path + "/*markup.xml", paths, true);
 				for (auto &filename : paths) {
@@ -70,11 +53,16 @@ int main() {
 					fileTypes(filename);
 				}
 			}
+			else {
+				if (path.substr(path.length() - 4, 4) == ".xml") {
+					fileTypes(path);
+				}
+				else cout << "Not a xml file: " << path << endl;
+			}
+			cout << endl << "To quit enter q..." << endl;
 		}
-		cout << endl << "To quit press Esc..." << endl;
 	}
 	//system("PAUSE");
-	//std::cin.get(); std::cin.get();
+	std::cin.get(); std::cin.get();
 	return 0;
 }
-
