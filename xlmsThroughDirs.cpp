@@ -17,7 +17,7 @@ void fileTypes(string filename) {
 	FileStorage fs(filename, FileStorage::READ);
 	FileNode node = fs["FrameDataArray"];
 	string txt;
-	map<string, int> typesCount;
+	//map<string, int> typesCount;
 	for (auto it : node) {
 		FileNode subNode = it["FrameObjects"];
 		for (auto subIt : subNode) {
@@ -26,43 +26,41 @@ void fileTypes(string filename) {
 		}
 	}
 
-	for (auto &i : typesCount) {
-		cout << i.first << " : " << i.second << endl;
-	}
+	
 }
 
 
-int main() {
-	while (true) {
-		cout << endl << "Enter full path: " << endl;
+int main(int args, char* argv[]) {
+	if (args == 1) {
+		cout << "No path specified!" << endl;
+	} else {
 		string path;
+		path = argv[1];
 		struct stat s;
-		std::cin >> path;
 		char *cpath = &path[0u];
-		if (path == "q")
-			break;
 		if (stat(cpath, &s) < 0) {
 			cout << "No such file or directory: " << path << endl;
 		}
 		else {
+			map<string, int> typesCount;
 			if (s.st_mode & S_IFDIR != 0) {
 				vector<String> paths;
 				glob(path + "/*markup.xml", paths, true);
 				for (auto &filename : paths) {
 					cout << filename << endl;
-					fileTypes(filename);
+					fileTypes(filename, typesCount);
 				}
 			}
 			else {
 				if (path.substr(path.length() - 4, 4) == ".xml") {
-					fileTypes(path);
+					fileTypes(path, typesCount);
 				}
 				else cout << "Not a xml file: " << path << endl;
 			}
-			cout << endl << "To quit enter q..." << endl;
+			for (auto &i : typesCount) {
+				cout << i.first << " : " << i.second << endl;
+			}
 		}
 	}
-	//system("PAUSE");
-	std::cin.get(); std::cin.get();
 	return 0;
 }
