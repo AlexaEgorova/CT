@@ -61,3 +61,59 @@ int main(int args, char* argv[]) {
 	
 	return 0;
 }
+
+//USING FILESYSTEM
+
+//std::vector<std::string> ls_wc(const std::string &folder, const std::string &wildcard, bool subfolders,
+//	bool files)
+//{
+//	return stlplus::folder_wildcard(folder, wildcard, subfolders, files);
+//}
+//
+//int main(int args, char* argv[]) {
+//	if (args == 1) {
+//		cout << "No path specified" << endl;
+//	}
+//	else {
+//		string path;
+//		path = argv[1];
+//		struct stat s;
+//		char *cpath = &path[0u];
+//		if (stat(cpath, &s) < 0) {
+//			cout << "No such file or directory: " << path << endl;
+//		}
+//		else {
+//			std::map<std::string, int> typesCount;
+//			if (s.st_mode & S_IFDIR != 0) {
+//				vector<string> paths;
+//				if (path[path.length() - 1] != '/') {
+//					path += '/';
+//				}
+//				paths = ls_wc(path, "*.avi.dat", true, true);
+//				if (paths.size() == 0) {
+//					cout << "No needed directories!" << endl;
+//				} else {
+//					for (auto &folder : paths) {
+//						vector<string> files;
+//						files = ls_wc(path + folder, "*.xml", true, true);
+//						for (auto &xml : files) {
+//							cout << path + folder + "/" + xml << endl;
+//							fileTypes(path + folder + "/" + xml, typesCount);
+//						}
+//					}
+//				}
+//			}
+//			else {
+//				if (path.substr(path.length() - 4, 4) == ".xml") {
+//					fileTypes(path, typesCount);
+//				}
+//				else cout << "Not a xml file: " << path << endl;
+//			}
+//			for (auto &i : typesCount) {
+//				cout << i.first << " : " << i.second << endl;
+//			}
+//		}
+//	}
+//	return 0;
+//}
+//
